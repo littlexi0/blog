@@ -1,0 +1,419 @@
+---
+title: CodeFoces1722题解
+date: 2022/9/1
+updated: 2022/9/1
+cover: https://images.alphacoders.com/122/thumbbig-1225772.webp
+top_img: 
+description: codeforces第1722场题解
+swiper_index: 12 #置顶轮播图顺序，非负整数，数字越大越靠前
+categories: codeforces
+---
+
+## A. Spell Check
+[链接](https://codeforces.com/contest/1722/problem/A)
+
+### 题目描述
+Timur likes his name. As a spelling of his name, he allows any permutation of the letters of the name. For example, the following strings are valid spellings of his name: Timur, miurT, Trumi, mriTu. Note that the correct spelling must have uppercased T and lowercased other letters.
+
+Today he wrote string s of length n consisting only of uppercase or lowercase Latin letters. He asks you to check if s is the correct spelling of his name.
+
+#### 翻译
+输入n个字符串，判断是否是符合要求的字符串
+
+### Input
+The first line of the input contains an integer t (1≤t≤103) — the number of test cases.
+
+The first line of each test case contains an integer n (1≤n≤10) — the length of string s.
+
+The second line of each test case contains a string s consisting of only uppercase or lowercase Latin characters.
+
+### Output
+For each test case, output "YES" (without quotes) if s satisfies the condition, and "NO" (without quotes) otherwise.
+
+You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
+
+### 解题思路
+本题可以先利用全排列，把所有符合规则字符串找出来，然后对答案依次排列
+
+### 参考代码
+
+```
+#include<iostream>
+#include<string>
+#include<vector>
+#include<list>
+#include<algorithm>
+#include<deque>
+#include<set>
+#include<map>
+#include<queue>
+#include<math.h>
+#include<unordered_set>
+#include<unordered_map>
+using namespace std;
+
+vector<string> vs;
+void backtrack(string& temp)
+{
+    if (temp.size() == 5)
+    {
+        vs.push_back(temp);
+        return;
+    }
+    if (temp.find('T')==temp.npos)
+    {
+        temp.push_back('T');
+        backtrack(temp);
+        temp.pop_back();
+    }
+    if (temp.find('i') == temp.npos)
+    {
+        temp.push_back('i');
+        backtrack(temp);
+        temp.pop_back();
+    }
+    if (temp.find('m') == temp.npos)
+    {
+        temp.push_back('m');
+        backtrack(temp);
+        temp.pop_back();
+    }
+    if (temp.find('u') == temp.npos)
+    {
+        temp.push_back('u');
+        backtrack(temp);
+        temp.pop_back();
+    }
+    if (temp.find('r') == temp.npos)
+    {
+        temp.push_back('r');
+        backtrack(temp);
+        temp.pop_back();
+    }
+}
+int main() {
+    int test = 0;
+    cin >> test;
+    string temp = "";
+    backtrack(temp);
+    while (test--)
+    {
+        int n= 0;
+        cin >> n;
+        string name;
+        cin >> name;
+        int f = 0;
+        for (int i = 0; i < vs.size(); i++)
+        {
+            if (vs[i] == name)
+            {
+                f = 1;
+                break;
+            }
+        }
+        if (f)
+            cout << "YES" << endl;
+        else
+            cout << "NO" << endl;
+
+    }
+    system("pause");
+}
+
+```
+
+## B. Colourblindness
+[链接](https://codeforces.com/contest/1722/problem/B)
+### 题目描述
+
+Vasya has a grid with 2 rows and n columns. He colours each cell red, green, or blue.
+
+Vasya is colourblind and can't distinguish green from blue. Determine if Vasya will consider the two rows of the grid to be coloured the same.
+
+### Input
+
+The input consists of multiple test cases. The first line contains an integer t (1≤t≤100) — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains an integer n (1≤n≤100) — the number of columns of the grid.
+
+The following two lines each contain a string consisting of n characters, each of which is either R, G, or B, representing a red, green, or blue cell, respectively — the description of the grid.
+
+### Output
+
+For each test case, output "YES" if Vasya considers the grid's two rows to be identical, and "NO" otherwise.
+
+You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
+
+### 解题思路
+将所有的G替换成B，然后比较两个字符串是否相等
+
+### 参考代码
+
+```
+#include<iostream>
+#include<string>
+#include<vector>
+#include<list>
+#include<algorithm>
+#include<deque>
+#include<set>
+#include<map>
+#include<queue>
+#include<math.h>
+#include<unordered_set>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    int test = 0;
+    cin >> test;
+    while (test--)
+    {
+        int n = 0;
+        cin >> n;
+        string s1;
+        string s2;
+        cin >> s1 >> s2;
+        for (int i = 0; i < s1.size(); i++)
+        {
+            if (s1[i] == 'B')
+                s1[i] = 'G';
+        }
+        for (int i = 0; i < s2.size(); i++)
+        {
+            if (s2[i] == 'B')
+                s2[i] = 'G';
+        }
+        if (s1 == s2)
+            cout << "YES" << endl;
+        else
+            cout << "NO" << endl;
+
+    }
+    system("pause");
+}
+```
+
+## C. Word Game
+[链接](https://codeforces.com/contest/1722/problem/C)
+### 题目描述
+
+Three guys play a game: first, each person writes down n distinct words of length 3. Then, they total up the number of points as follows:
+
+if a word was written by one person — that person gets 3 points,
+if a word was written by two people — each of the two gets 1 point,
+if a word was written by all — nobody gets any points.
+In the end, how many points does each player have?
+
+### Input
+
+The input consists of multiple test cases. The first line contains an integer t (1≤t≤100) — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains an integer n (1≤n≤1000) — the number of words written by each person.
+
+The following three lines each contain n distinct strings — the words written by each person. Each string consists of 3 lowercase English characters.
+
+### Output
+
+For each test case, output three space-separated integers — the number of points each of the three guys earned. You should output the answers in the same order as the input; the i-th integer should be the number of points earned by the i-th guy.
+
+### 解题思路
+用hashset存储出现的字符串，对每个字符串序列进行遍历比较
+
+### 参考代码
+
+```
+#include<iostream>
+#include<string>
+#include<vector>
+#include<list>
+#include<algorithm>
+#include<deque>
+#include<set>
+#include<map>
+#include<queue>
+#include<math.h>
+#include<unordered_set>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    int test = 0;
+    cin >> test;
+
+    while (test--)
+    {
+        int n = 0;
+        cin >> n;
+        unordered_set<string> v1;
+        unordered_set<string> v2;
+        unordered_set<string> v3;
+        for (int i = 0; i < n; i++)
+        {
+            string val;
+            cin >> val;
+            v1.insert(val);
+        }
+        for (int i = 0; i < n; i++)
+        {
+            string val;
+            cin >> val;
+            v2.insert(val);
+        }
+        for (int i = 0; i < n; i++)
+        {
+            string val;
+            cin >> val;
+            v3.insert(val);
+        }
+        int sco1 = 0;
+        int sco2 = 0;
+        int sco3 = 0;
+        for (auto val : v1)
+        {
+            int f1 = v2.count(val);
+            int f2 = v3.count(val);
+            if (f1 && f2)
+                continue;
+            if (f1 == 0 && f2 == 0)
+            {
+                sco1 += 3;
+                continue;
+            }
+            sco1 += 1;
+        }
+        for (auto val : v2)
+        {
+            int f1 = v1.count(val);
+            int f2 = v3.count(val);
+            if (f1 && f2)
+                continue;
+            if (f1 == 0 && f2 == 0)
+            {
+                sco2 += 3;
+                continue;
+            }
+            sco2 += 1;
+        }
+        for (auto val : v3)
+        {
+            int f1 = v1.count(val);
+            int f2 = v2.count(val);
+            if (f1 && f2)
+                continue;
+            if (f1 == 0 && f2 == 0)
+            {
+                sco3 += 3;
+                continue;
+            }
+            sco3 += 1;
+        }
+        cout << sco1 << " " << sco2 << " " << sco3 << endl;
+    }
+    system("pause");
+}
+```
+
+## D. Line
+[链接](https://codeforces.com/contest/1722/problem/D)
+### 题目描述
+
+There are n people in a horizontal line, each looking either to the left or the right. Each person counts the number of people in the direction they are looking. The value of the line is the sum of each person's count.
+
+For example, in the arrangement LRRLL, where L stands for a person looking left and R stands for a person looking right, the counts for each person are [0,3,2,3,4], and the value is 0+3+2+3+4=12.
+
+You are given the initial arrangement of people in the line. For each k from 1 to n, determine the maximum value of the line if you can change the direction of at most k people.
+
+### Input
+
+The input consists of multiple test cases. The first line contains an integer t (1≤t≤100) — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains an integer n (1≤n≤2⋅105) — the length of the line.
+
+The following line contains a string consisting of n characters, each of which is either L or R, representing a person facing left or right, respectively — the description of the line.
+
+It is guaranteed that the sum of n over all test cases does not exceed 2⋅105.
+
+Please note that the answer for some test cases won't fit into 32-bit integer type, so you should use at least 64-bit integer type in your programming language (like long long for C++).
+
+### Output
+
+For each test case, output n space-separated non-negative integers — the maximum value of the line if you can change the direction of at most k people for each k from 1 to n, inclusive.
+
+### 解题思路
+首先第一次不动头的方向，将值val计算出来
+然后遍历的时候用列表来存储可优化的值的大小
+对列表进行反向排序，k增大的时候，ans+=list[i]
+
+### 参考代码
+
+```
+#include<iostream>
+#include<string>
+#include<vector>
+#include<list>
+#include<algorithm>
+#include<deque>
+#include<set>
+#include<map>
+#include<queue>
+#include<math.h>
+#include<unordered_set>
+#include<unordered_map>
+using namespace std;
+
+bool pre(long long& x, long long& y)
+{
+    return x > y;
+}
+
+int main() {
+    int test = 0;
+    cin >> test;
+    while (test--)
+    {
+        int len = 0;
+        cin >> len;
+        string s;
+        cin >> s;
+        long long ans = 0;
+        vector<long long> v;
+        for (long long i = 0; i < s.size(); i++)
+        {
+            if (s[i] == 'L')
+            {
+                ans += i;
+                if (len - i - 1 > i)
+                {
+                    v.push_back(fabs(len - 2 * i - 1));
+                }
+                else
+                {
+                    v.push_back(0);
+                }
+            }
+            if (s[i] == 'R')
+            {
+                ans += len - i-1;
+                if (i > len - i - 1)
+                {
+                    v.push_back(2 * i - len + 1);
+                }
+                else
+                {
+                    v.push_back(0);
+                }
+            }
+            
+        }
+        sort(v.begin(), v.end(), pre);
+        for (int i = 0; i < len; i++)
+        {
+            ans += v[i];
+            cout << ans << " ";
+        }
+        cout <<endl;
+    }
+    system("pause");
+}
+```
